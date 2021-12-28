@@ -34,6 +34,11 @@ public class UserApi {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/profiles")
+    public ResponseEntity<RegisterResponseDto> getProfiles() {
+        return ResponseEntity.ok(userBusiness.getProfiles());
+    }
+
     @PutMapping
     public ResponseEntity<RegisterResponseDto> updateUserName(@RequestBody RegisterRequestDto requestDto) throws BaseException {
         RegisterResponseDto response = userBusiness.updateUserName(requestDto);

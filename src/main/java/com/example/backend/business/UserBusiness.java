@@ -90,14 +90,21 @@ public class UserBusiness {
 
     public RegisterResponseDto updateUserName(RegisterRequestDto requestDto) throws BaseException {
 
-        Optional<User> byEmail = userService.findByEmail(requestDto.getEmail());
-        if (byEmail.isEmpty()) {
-            throw new BaseException("email is not exist");
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String userId = (String) authentication.getPrincipal();
+
+        Optional<User> byId = userService.findById(userId);
+        if (byId.isEmpty()){
+            throw new BaseException("can not found id");
         }
 
-        User user = userService.updateUserName(requestDto.getName(), requestDto.getEmail());
+        User user = byId.get();
+        user.setName(requestDto.getName());
 
-        return userMapper.toRegisterResponse(user);
+        User updateUserName = userService.updateUserName(user);
+
+        return userMapper.toRegisterResponse(updateUserName);
 
     }
 
@@ -119,5 +126,16 @@ public class UserBusiness {
 
         return tokenService.token(userOptional.get());
 
+    }
+
+    public RegisterResponseDto getProfiles() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String userId = (String) authentication.getPrincipal();
+
+        Optional<User> byId = userService.findById(userId);
+        User user = byId.get();
+
+        return userMapper.toRegisterResponse(user);
     }
 }

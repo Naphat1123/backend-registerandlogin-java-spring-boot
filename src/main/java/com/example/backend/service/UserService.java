@@ -55,10 +55,8 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public User updateUserName(String name, String email) {
-        Optional<User> byEmail = userRepo.findByEmail(email);
-        User user = byEmail.get();
-        user.setName(name);
+    public User updateUserName(User user) {
+        user.setName(user.getName());
         userRepo.save(user);
         return user;
     }
