@@ -3,7 +3,6 @@ package com.example.backend.service;
 import com.example.backend.entity.Product;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
-import com.example.backend.model.ProductDto;
 import com.example.backend.model.ProductRequest;
 import com.example.backend.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
