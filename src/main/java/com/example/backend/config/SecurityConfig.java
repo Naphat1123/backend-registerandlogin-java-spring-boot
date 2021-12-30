@@ -1,6 +1,5 @@
 package com.example.backend.config;
 
-import com.example.backend.config.token.TokenFilter;
 import com.example.backend.config.token.TokenFilterConfiguerer;
 import com.example.backend.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

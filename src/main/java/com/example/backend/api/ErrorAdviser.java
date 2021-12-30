@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 public class ErrorAdviser {
 
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity<ErrorResponse> handleBaseException(BaseException e){
+    public ResponseEntity<ErrorResponse> handleBaseException(BaseException e) {
         ErrorResponse response = new ErrorResponse();
         response.setError(e.getMessage());
         response.setStatus(HttpStatus.EXPECTATION_FAILED.value());
-        return new ResponseEntity<>(response , HttpStatus.EXPECTATION_FAILED);
+        return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
     }
 
     @Data
-    public static class  ErrorResponse {
+    public static class ErrorResponse {
         private LocalDateTime localDateTime = LocalDateTime.now();
 
         private int status;

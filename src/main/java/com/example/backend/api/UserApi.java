@@ -2,10 +2,7 @@ package com.example.backend.api;
 
 import com.example.backend.business.UserBusiness;
 import com.example.backend.exception.BaseException;
-import com.example.backend.model.LoginRequestDto;
-import com.example.backend.model.RegisterRequestDto;
-import com.example.backend.model.RegisterResponseDto;
-import com.example.backend.model.TestResponse;
+import com.example.backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +32,7 @@ public class UserApi {
     }
 
     @GetMapping("/profiles")
-    public ResponseEntity<RegisterResponseDto> getProfiles() {
+    public ResponseEntity<ProfileDto> getProfiles() {
         return ResponseEntity.ok(userBusiness.getProfiles());
     }
 

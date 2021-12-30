@@ -4,6 +4,7 @@ import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.LoginRequestDto;
+import com.example.backend.model.ProfileDto;
 import com.example.backend.model.RegisterRequestDto;
 import com.example.backend.model.RegisterResponseDto;
 import com.example.backend.service.FileUploadService;
@@ -95,7 +96,7 @@ public class UserBusiness {
         String userId = (String) authentication.getPrincipal();
 
         Optional<User> byId = userService.findById(userId);
-        if (byId.isEmpty()){
+        if (byId.isEmpty()) {
             throw new BaseException("can not found id");
         }
 
@@ -128,7 +129,7 @@ public class UserBusiness {
 
     }
 
-    public RegisterResponseDto getProfiles() {
+    public ProfileDto getProfiles() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         String userId = (String) authentication.getPrincipal();
@@ -136,6 +137,6 @@ public class UserBusiness {
         Optional<User> byId = userService.findById(userId);
         User user = byId.get();
 
-        return userMapper.toRegisterResponse(user);
+        return userMapper.toProfile(user);
     }
 }

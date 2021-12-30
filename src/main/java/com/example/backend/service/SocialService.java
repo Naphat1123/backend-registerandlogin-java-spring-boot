@@ -36,7 +36,7 @@ public class SocialService {
 
             return socialRepo.save(social);
         } catch (Exception e) {
-            throw  new BaseException("can't create social");
+            throw new BaseException("can't create social");
         }
 
     }

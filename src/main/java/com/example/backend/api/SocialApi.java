@@ -15,7 +15,7 @@ public class SocialApi {
     private SocialBusiness socialBusiness;
 
     @GetMapping
-    private ResponseEntity<SocialDto> getSocial(){
+    private ResponseEntity<SocialDto> getSocial() {
         return ResponseEntity.ok(socialBusiness.getSocial());
     }
 

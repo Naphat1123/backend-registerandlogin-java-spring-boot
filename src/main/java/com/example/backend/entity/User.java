@@ -1,12 +1,13 @@
 package com.example.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -25,5 +26,7 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user")
     private Social social;
 
+    @OneToMany(mappedBy = "user")
+    private List<Product> product;
 
 }
