@@ -1,29 +1,33 @@
 package com.example.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity(name = "m_User")
-public class User extends BaseEntity {
+@Entity(name = "m_social")
+public class Social extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 60)
-    private String email;
+    private String facebook;
 
     @Column(nullable = false, length = 120)
-    private String password;
+    private String line;
 
     @Column(nullable = false, length = 60)
-    private String name;
+    private String instagram;
 
-    @OneToOne(mappedBy = "user")
-    private Social social;
+    @Column(nullable = false, length = 60)
+    private String tiktok;
+
+    @OneToOne
+    @JoinColumn(name = "m_user_id")
+    private User user;
 
 
 }
