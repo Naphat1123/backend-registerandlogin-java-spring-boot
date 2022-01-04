@@ -33,4 +33,10 @@ public class ProductApi {
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductRequest request) throws BaseException {
         return ResponseEntity.ok(productBusiness.updateProduct(request));
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteProduct(@RequestBody ProductRequest request) throws BaseException {
+        productBusiness.deleteProduct(request);
+        return ResponseEntity.ok("deleted");
+    }
 }

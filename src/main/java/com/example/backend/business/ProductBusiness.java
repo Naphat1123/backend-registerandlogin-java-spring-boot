@@ -64,4 +64,15 @@ public class ProductBusiness {
 
         return productMappper.toProduct(product);
     }
+
+    public void deleteProduct(ProductRequest request) throws BaseException {
+        try {
+            if (ObjectUtils.isEmpty(request.getId())) {
+                throw new BaseException("id can't empty");
+            }
+            productService.deleteProduct(request.getId());
+        } catch (BaseException e) {
+            throw new BaseException("can't delete product");
+        }
+    }
 }

@@ -3,9 +3,7 @@ package com.example.backend.model;
 import lombok.Data;
 
 @Data
-public class RegisterResponseDto {
-
-    private String email;
+public class UpdateProfileRequest {
 
     private String name;
 

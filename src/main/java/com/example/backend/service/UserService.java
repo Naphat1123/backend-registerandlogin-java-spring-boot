@@ -1,7 +1,10 @@
 package com.example.backend.service;
 
+import com.example.backend.entity.Address;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
+import com.example.backend.model.AddressRequest;
+import com.example.backend.repository.AddressRepo;
 import com.example.backend.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AddressRepo addressRepo;
 
 
     public User create(String email, String password, String name) throws BaseException {
@@ -57,6 +63,9 @@ public class UserService {
 
     public User updateUserName(User user) {
         user.setName(user.getName());
+        user.setGender(user.getGender());
+        user.setPhone_number(user.getPhone_number());
+        user.setDateOfBirth(user.getDateOfBirth());
         userRepo.save(user);
         return user;
     }
@@ -64,5 +73,14 @@ public class UserService {
     public Optional<User> findById(String userId) {
         return userRepo.findById(userId);
 
+    }
+
+    public Address createAddress(User user, AddressRequest request) {
+        Address entity = new Address();
+        entity.setUser(user);
+        entity.setAddress(request.getAddress());
+        entity.setCity(request.getCity());
+        entity.setZipcode(request.getZipcode());
+        return addressRepo.save(entity);
     }
 }

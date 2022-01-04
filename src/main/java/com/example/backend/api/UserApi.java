@@ -36,10 +36,16 @@ public class UserApi {
         return ResponseEntity.ok(userBusiness.getProfiles());
     }
 
-    @PutMapping
-    public ResponseEntity<RegisterResponseDto> updateUserName(@RequestBody RegisterRequestDto requestDto) throws BaseException {
+    @PutMapping("/profiles")
+    public ResponseEntity<RegisterResponseDto> updateUserName(@RequestBody UpdateProfileRequest requestDto) throws BaseException {
         RegisterResponseDto response = userBusiness.updateUserName(requestDto);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/profiles/addresses")
+    public ResponseEntity<String> createAddress(@RequestBody AddressRequest request) throws BaseException {
+        userBusiness.createAddress(request);
+        return ResponseEntity.ok("address has created");
     }
 
     @PostMapping("/login")

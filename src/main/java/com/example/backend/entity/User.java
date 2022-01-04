@@ -23,10 +23,22 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 60)
     private String name;
 
+    @Column(length = 60)
+    private String gender;
+
+    @Column(length = 30)
+    private String phone_number;
+
+    @Column(length = 60)
+    private String dateOfBirth;
+
     @OneToOne(mappedBy = "user")
     private Social social;
 
     @OneToMany(mappedBy = "user")
     private List<Product> product;
+
+    @OneToMany(mappedBy = "user")
+    private List<Address> addresses;
 
 }

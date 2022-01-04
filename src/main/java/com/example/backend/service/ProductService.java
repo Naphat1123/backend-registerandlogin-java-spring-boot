@@ -45,6 +45,10 @@ public class ProductService {
         }
     }
 
+    public void deleteProduct(String id) {
+        productRepo.deleteById(id);
+    }
+
 //    public Product updateProduct(User user, String id) throws BaseException {
 //        Optional<Product> productOptional = productRepo.findById(id);
 //        Product product = productOptional.get();

@@ -1,12 +1,10 @@
 package com.example.backend.business;
 
+import com.example.backend.entity.Address;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
 import com.example.backend.mapper.UserMapper;
-import com.example.backend.model.LoginRequestDto;
-import com.example.backend.model.ProfileDto;
-import com.example.backend.model.RegisterRequestDto;
-import com.example.backend.model.RegisterResponseDto;
+import com.example.backend.model.*;
 import com.example.backend.service.FileUploadService;
 import com.example.backend.service.TokenService;
 import com.example.backend.service.UserService;
@@ -15,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
@@ -89,7 +88,7 @@ public class UserBusiness {
         return collect;
     }
 
-    public RegisterResponseDto updateUserName(RegisterRequestDto requestDto) throws BaseException {
+    public RegisterResponseDto updateUserName(UpdateProfileRequest requestDto) throws BaseException {
 
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
@@ -102,6 +101,9 @@ public class UserBusiness {
 
         User user = byId.get();
         user.setName(requestDto.getName());
+        user.setGender(requestDto.getGender());
+        user.setPhone_number(requestDto.getPhone_number());
+        user.setDateOfBirth(requestDto.getDateOfBirth());
 
         User updateUserName = userService.updateUserName(user);
 
@@ -138,5 +140,26 @@ public class UserBusiness {
         User user = byId.get();
 
         return userMapper.toProfile(user);
+    }
+
+    public void createAddress(AddressRequest request) throws BaseException {
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String userId = (String) authentication.getPrincipal();
+
+            Optional<User> byId = userService.findById(userId);
+            User user = byId.get();
+
+            if (ObjectUtils.isEmpty(request)) {
+                throw new BaseException("request is empty");
+            }
+
+            Address address = userService.createAddress(user, request);
+        } catch (BaseException e) {
+            throw new BaseException("can't create address");
+        }
+
+
     }
 }
