@@ -12,7 +12,7 @@ public class ProfileDto {
     private String gender;
     private String phone_number;
     private String dateOfBirth;
-    private List<AddressRequest> addresses;
+    private List<AddressDto> addresses;
     private List<ProductDto> product;
 
 }

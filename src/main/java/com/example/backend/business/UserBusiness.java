@@ -3,8 +3,10 @@ package com.example.backend.business;
 import com.example.backend.entity.Address;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
+import com.example.backend.mapper.AddressMapper;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.*;
+import com.example.backend.service.AddressService;
 import com.example.backend.service.FileUploadService;
 import com.example.backend.service.TokenService;
 import com.example.backend.service.UserService;
@@ -32,6 +34,10 @@ public class UserBusiness {
     private UserMapper userMapper;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private AddressService addressService;
+    @Autowired
+    private AddressMapper addressMapper;
 
     public RegisterResponseDto register(RegisterRequestDto requestDto) throws BaseException {
         User user = userService.create(requestDto.getEmail(), requestDto.getPassword(), requestDto.getName());
@@ -142,7 +148,7 @@ public class UserBusiness {
         return userMapper.toProfile(user);
     }
 
-    public void createAddress(AddressRequest request) throws BaseException {
+    public AddressDto createAddress(AddressRequest request) throws BaseException {
         try {
             SecurityContext context = SecurityContextHolder.getContext();
             Authentication authentication = context.getAuthentication();
@@ -156,10 +162,47 @@ public class UserBusiness {
             }
 
             Address address = userService.createAddress(user, request);
+            return addressMapper.toAddress(address);
         } catch (BaseException e) {
             throw new BaseException("can't create address");
         }
 
 
+    }
+
+    public AddressDto updateAddress(AddressRequest request) throws BaseException {
+        if (ObjectUtils.isEmpty(request.getId())) {
+            throw new BaseException("id not found");
+        }
+        Optional<Address> addressOptional = addressService.findById(request.getId());
+        if (addressOptional.isEmpty()) {
+            throw new BaseException("address not exist");
+        }
+        Address address = addressOptional.get();
+        if (!request.getAddress().isEmpty()) {
+            address.setAddress(request.getAddress());
+        }
+        if (!request.getCity().isEmpty()) {
+            address.setCity(request.getCity());
+        }
+        if (!request.getZipcode().isEmpty()) {
+            address.setZipcode(request.getZipcode());
+        }
+
+        Address updateAddress = addressService.updateAddress(address);
+
+        return addressMapper.toAddress(updateAddress);
+
+    }
+
+    public void deleteAddress(AddressRequest request) throws BaseException {
+        try {
+            if (ObjectUtils.isEmpty(request.getId())) {
+                throw new BaseException("id can't empty");
+            }
+            addressService.deleteAddress(request.getId());
+        } catch (BaseException e) {
+            throw new BaseException("can't delete address");
+        }
     }
 }

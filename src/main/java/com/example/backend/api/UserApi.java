@@ -43,9 +43,19 @@ public class UserApi {
     }
 
     @PostMapping("/profiles/addresses")
-    public ResponseEntity<String> createAddress(@RequestBody AddressRequest request) throws BaseException {
-        userBusiness.createAddress(request);
-        return ResponseEntity.ok("address has created");
+    public ResponseEntity<AddressDto> createAddress(@RequestBody AddressRequest request) throws BaseException {
+        return ResponseEntity.ok(userBusiness.createAddress(request));
+    }
+
+    @PutMapping("/profiles/addresses")
+    public ResponseEntity<AddressDto> updateAddress(@RequestBody AddressRequest request) throws BaseException {
+        return ResponseEntity.ok(userBusiness.updateAddress(request));
+    }
+
+    @DeleteMapping("/profiles/addresses")
+    public ResponseEntity<String> deleteAddress(@RequestBody AddressRequest request) throws BaseException {
+        userBusiness.deleteAddress(request);
+        return ResponseEntity.ok("address has deleted");
     }
 
     @PostMapping("/login")
