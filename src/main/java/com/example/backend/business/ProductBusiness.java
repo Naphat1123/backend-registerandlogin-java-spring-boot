@@ -6,6 +6,7 @@ import com.example.backend.exception.BaseException;
 import com.example.backend.mapper.ProductMappper;
 import com.example.backend.model.ProductDto;
 import com.example.backend.model.ProductRequest;
+import com.example.backend.model.SearchProductRequest;
 import com.example.backend.service.ProductService;
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductBusiness {
@@ -73,6 +76,37 @@ public class ProductBusiness {
             productService.deleteProduct(request.getId());
         } catch (BaseException e) {
             throw new BaseException("can't delete product");
+        }
+    }
+
+    public List<ProductDto> getAllProduct() throws BaseException {
+        try {
+            List<Product> productList = productService.findAll();
+
+            return productList.stream()
+                    .map(product -> productMappper.toProduct(product))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new BaseException("can't find product");
+        }
+    }
+
+    public List<ProductDto> getSearchProduct(SearchProductRequest request) throws BaseException {
+        try {
+
+            List<Product> productList;
+
+            if (ObjectUtils.isEmpty(request.getSearchValue())) {
+                productList = productService.findAll();
+            }
+
+            productList = productService.getSearchProduct(request.getSearchValue());
+
+            return productList.stream()
+                    .map(product -> productMappper.toProduct(product))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new BaseException("can't search product");
         }
     }
 }

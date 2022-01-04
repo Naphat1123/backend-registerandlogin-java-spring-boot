@@ -3,17 +3,22 @@ package com.example.backend.service;
 import com.example.backend.entity.Product;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
+import com.example.backend.mapper.ProductMappper;
 import com.example.backend.model.ProductRequest;
 import com.example.backend.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProductService {
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private ProductMappper productMappper;
 
     public Product createProduct(User user, ProductRequest request) throws BaseException {
         try {
@@ -49,10 +54,13 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-//    public Product updateProduct(User user, String id) throws BaseException {
-//        Optional<Product> productOptional = productRepo.findById(id);
-//        Product product = productOptional.get();
-//
-//
-//    }
+    public List<Product> findAll() {
+        return productRepo.findAll();
+    }
+
+    public List<Product> getSearchProduct(String searchValue) {
+
+        return productRepo.findByNameContainingIgnoreCase(searchValue);
+
+    }
 }
