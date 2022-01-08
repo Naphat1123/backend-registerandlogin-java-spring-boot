@@ -7,6 +7,8 @@ import com.example.backend.mapper.ProductMappper;
 import com.example.backend.model.ProductRequest;
 import com.example.backend.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,9 +60,13 @@ public class ProductService {
         return productRepo.findAll();
     }
 
-    public List<Product> getSearchProduct(String searchValue) {
+    public Page<Product> getSearchProduct(String searchValue, Pageable pageable) {
 
-        return productRepo.findByNameContainingIgnoreCase(searchValue);
+        return productRepo.findByNameContainingIgnoreCase(searchValue, pageable);
 
+    }
+
+    public Page<Product> findAllProduct(Pageable pageable) {
+        return productRepo.findAll(pageable);
     }
 }

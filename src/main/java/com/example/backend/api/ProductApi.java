@@ -3,6 +3,7 @@ package com.example.backend.api;
 import com.example.backend.business.ProductBusiness;
 import com.example.backend.business.UserBusiness;
 import com.example.backend.exception.BaseException;
+import com.example.backend.model.ListProductDto;
 import com.example.backend.model.ProductDto;
 import com.example.backend.model.ProductRequest;
 import com.example.backend.model.SearchProductRequest;
@@ -27,7 +28,7 @@ public class ProductApi {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<ProductDto>> searchProduct(@RequestBody SearchProductRequest request) throws BaseException {
+    public ResponseEntity<ListProductDto> searchProduct(@RequestBody SearchProductRequest request) throws BaseException {
         return ResponseEntity.ok(productBusiness.getSearchProduct(request));
     }
 

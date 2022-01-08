@@ -4,12 +4,16 @@ import com.example.backend.entity.Product;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
 import com.example.backend.mapper.ProductMappper;
+import com.example.backend.model.ListProductDto;
 import com.example.backend.model.ProductDto;
 import com.example.backend.model.ProductRequest;
 import com.example.backend.model.SearchProductRequest;
 import com.example.backend.service.ProductService;
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -91,20 +95,43 @@ public class ProductBusiness {
         }
     }
 
-    public List<ProductDto> getSearchProduct(SearchProductRequest request) throws BaseException {
+    public ListProductDto getSearchProduct(SearchProductRequest request) throws BaseException {
         try {
 
-            List<Product> productList;
+            ListProductDto listProductDto = new ListProductDto();
 
-            if (ObjectUtils.isEmpty(request.getSearchValue())) {
-                productList = productService.findAll();
+            int page_number = request.getPage_number();
+            int page_size = request.getPage_size();
+
+            if (ObjectUtils.isEmpty(request.getPage_number())) {
+                page_number = 0;
             }
 
-            productList = productService.getSearchProduct(request.getSearchValue());
+            if (ObjectUtils.isEmpty(request.getPage_size())) {
+                page_size = 0;
+            }
 
-            return productList.stream()
+            Pageable pageable = PageRequest.of(page_number, page_size);
+
+            Page<Product> productList;
+
+            if (ObjectUtils.isEmpty(request.getSearchValue())) {
+                productList = productService.findAllProduct(pageable);
+            }
+
+            productList = productService.getSearchProduct(request.getSearchValue(), pageable);
+
+            List<Product> collectProduct = productList.get().collect(Collectors.toList());
+
+            List<ProductDto> collect = collectProduct.stream()
                     .map(product -> productMappper.toProduct(product))
                     .collect(Collectors.toList());
+
+            listProductDto.setCount(productList.getSize());
+            listProductDto.setProductList(collect);
+
+            return listProductDto;
+
         } catch (Exception e) {
             throw new BaseException("can't search product");
         }
