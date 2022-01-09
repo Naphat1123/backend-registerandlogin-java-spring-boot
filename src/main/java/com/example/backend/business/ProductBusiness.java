@@ -127,7 +127,7 @@ public class ProductBusiness {
                     .map(product -> productMappper.toProduct(product))
                     .collect(Collectors.toList());
 
-            listProductDto.setCount(productList.getSize());
+            listProductDto.setCount((int) productList.getTotalElements());
             listProductDto.setProductList(collect);
 
             return listProductDto;
@@ -135,5 +135,22 @@ public class ProductBusiness {
         } catch (Exception e) {
             throw new BaseException("can't search product");
         }
+    }
+
+    public ListProductDto findByCategory(String request) throws BaseException {
+        if (ObjectUtils.isEmpty(request)) {
+            throw new BaseException("request is empty");
+        }
+
+        List<Product> byCategory = productService.findByCatagory(request);
+
+        List<ProductDto> productDtoList = byCategory.stream()
+                .map(product -> productMappper.toProduct(product))
+                .collect(Collectors.toList());
+
+        ListProductDto listProductDto = new ListProductDto();
+        listProductDto.setProductList(productDtoList);
+
+        return listProductDto;
     }
 }

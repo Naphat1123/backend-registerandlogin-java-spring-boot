@@ -28,6 +28,7 @@ public class ProductService {
             entity.setUser(user);
             entity.setName(request.getName());
             entity.setPrice(request.getPrice());
+            entity.setCatagory(request.getCatagory_name());
 
             return productRepo.save(entity);
         } catch (Exception e) {
@@ -68,5 +69,9 @@ public class ProductService {
 
     public Page<Product> findAllProduct(Pageable pageable) {
         return productRepo.findAll(pageable);
+    }
+
+    public List<Product> findByCatagory(String request) {
+        return productRepo.findByCatagory(request);
     }
 }
