@@ -11,7 +11,7 @@ public class ProductRequest {
 
     private int price;
 
-    private String catagory_name;
+    private String catagory_code;
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.entity.Category;
 import com.example.backend.entity.Product;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
@@ -22,15 +23,15 @@ public class ProductService {
     @Autowired
     private ProductMappper productMappper;
 
-    public Product createProduct(User user, ProductRequest request) throws BaseException {
+    public Product createProduct(User user, ProductRequest request, Category category) throws BaseException {
         try {
             Product entity = new Product();
             entity.setUser(user);
             entity.setName(request.getName());
             entity.setPrice(request.getPrice());
-            entity.setCatagory(request.getCatagory_name());
-
-            return productRepo.save(entity);
+            entity.setCategory(category);
+            productRepo.save(entity);
+            return entity;
         } catch (Exception e) {
             throw new BaseException("can't not create product");
         }
@@ -71,7 +72,4 @@ public class ProductService {
         return productRepo.findAll(pageable);
     }
 
-    public List<Product> findByCatagory(String request) {
-        return productRepo.findByCatagory(request);
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.backend.business;
 
+import com.example.backend.entity.Category;
 import com.example.backend.entity.Product;
 import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
@@ -8,8 +9,10 @@ import com.example.backend.model.ListProductDto;
 import com.example.backend.model.ProductDto;
 import com.example.backend.model.ProductRequest;
 import com.example.backend.model.SearchProductRequest;
+import com.example.backend.service.CategoryService;
 import com.example.backend.service.ProductService;
 import com.example.backend.service.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class ProductBusiness {
     @Autowired
@@ -33,6 +37,9 @@ public class ProductBusiness {
 
     @Autowired
     private ProductMappper productMappper;
+
+    @Autowired
+    private CategoryService categoryService;
 
 
     public ProductDto createProduct(ProductRequest request) throws BaseException {
@@ -49,7 +56,11 @@ public class ProductBusiness {
             throw new BaseException("price or name can't be empty");
         }
 
-        Product product = productService.createProduct(user, request);
+        Optional<Category> categoryOptional = categoryService.findByCode(request.getCatagory_code());
+        Category category = categoryOptional.get();
+        log.info("category = {}" , category );
+
+        Product product = productService.createProduct(user, request, category);
 
         return productMappper.toProduct(product);
 
@@ -137,20 +148,20 @@ public class ProductBusiness {
         }
     }
 
-    public ListProductDto findByCategory(String request) throws BaseException {
-        if (ObjectUtils.isEmpty(request)) {
-            throw new BaseException("request is empty");
-        }
-
-        List<Product> byCategory = productService.findByCatagory(request);
-
-        List<ProductDto> productDtoList = byCategory.stream()
-                .map(product -> productMappper.toProduct(product))
-                .collect(Collectors.toList());
-
-        ListProductDto listProductDto = new ListProductDto();
-        listProductDto.setProductList(productDtoList);
-
-        return listProductDto;
-    }
+//    public ListProductDto findByCategory(String request) throws BaseException {
+//        if (ObjectUtils.isEmpty(request)) {
+//            throw new BaseException("request is empty");
+//        }
+//
+//        List<Product> byCategory = productService.findByCatagory(request);
+//
+//        List<ProductDto> productDtoList = byCategory.stream()
+//                .map(product -> productMappper.toProduct(product))
+//                .collect(Collectors.toList());
+//
+//        ListProductDto listProductDto = new ListProductDto();
+//        listProductDto.setProductList(productDtoList);
+//
+//        return listProductDto;
+//    }
 }

@@ -32,10 +32,6 @@ public class ProductApi {
         return ResponseEntity.ok(productBusiness.getSearchProduct(request));
     }
 
-    @GetMapping("/search/{catagory}")
-    public ResponseEntity<ListProductDto> findByCategory(@PathVariable ("catagory") String request) throws BaseException {
-        return ResponseEntity.ok(productBusiness.findByCategory(request));
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getProductId(@PathVariable("id") String id) throws BaseException {
