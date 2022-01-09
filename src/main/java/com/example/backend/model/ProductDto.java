@@ -11,6 +11,6 @@ public class ProductDto {
 
     private int price;
 
-    private String catagory_name;
+    private String catagory;
 
 }
