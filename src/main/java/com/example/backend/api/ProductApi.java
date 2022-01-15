@@ -54,4 +54,10 @@ public class ProductApi {
         productBusiness.deleteProduct(request);
         return ResponseEntity.ok("deleted");
     }
+
+    @PostMapping("/buy")
+    public ResponseEntity<String> buyProduct(@RequestBody List<ProductRequest> request) throws BaseException {
+        productBusiness.buyProduct(request);
+        return ResponseEntity.ok("bought");
+    }
 }

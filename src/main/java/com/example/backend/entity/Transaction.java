@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,29 +15,28 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity(name = "m_product")
-public class Product extends BaseEntity {
+@Entity(name = "transaction")
+public class Transaction extends BaseEntity {
 
-    @Column(nullable = false, length = 60)
-    private String name;
+    private String product_name;
 
-    @Column(nullable = false, length = 60)
-    private int price;
+    private int product_price;
 
     @ManyToOne
-    @JoinColumn(name = "m_product_category")
-    private Category category;
+    @JoinColumn(name = "seller_id")
+    private User seller;
 
     @ManyToOne
-    @JoinColumn(name = "m_user_id")
-    private User user;
+    @JoinColumn(name = "buyer_id")
+    private User buyer;
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Product product = (Product) o;
-        return getId() != null && Objects.equals(getId(), product.getId());
+        Transaction that = (Transaction) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override

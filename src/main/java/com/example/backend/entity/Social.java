@@ -1,15 +1,21 @@
 package com.example.backend.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity(name = "m_social")
 public class Social extends BaseEntity {
 
@@ -29,5 +35,16 @@ public class Social extends BaseEntity {
     @JoinColumn(name = "m_user_id")
     private User user;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Social social = (Social) o;
+        return getId() != null && Objects.equals(getId(), social.getId());
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

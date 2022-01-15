@@ -11,6 +11,7 @@ import com.example.backend.model.ProductRequest;
 import com.example.backend.model.SearchProductRequest;
 import com.example.backend.service.CategoryService;
 import com.example.backend.service.ProductService;
+import com.example.backend.service.TransactionService;
 import com.example.backend.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -41,6 +43,9 @@ public class ProductBusiness {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private TransactionService transactionService;
+
 
     public ProductDto createProduct(ProductRequest request) throws BaseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -58,7 +63,7 @@ public class ProductBusiness {
 
         Optional<Category> categoryOptional = categoryService.findByCode(request.getCatagory_code());
         Category category = categoryOptional.get();
-        log.info("category = {}" , category );
+        log.info("category = {}", category);
 
         Product product = productService.createProduct(user, request, category);
 
@@ -148,20 +153,28 @@ public class ProductBusiness {
         }
     }
 
-//    public ListProductDto findByCategory(String request) throws BaseException {
-//        if (ObjectUtils.isEmpty(request)) {
-//            throw new BaseException("request is empty");
-//        }
-//
-//        List<Product> byCategory = productService.findByCatagory(request);
-//
-//        List<ProductDto> productDtoList = byCategory.stream()
-//                .map(product -> productMappper.toProduct(product))
-//                .collect(Collectors.toList());
-//
-//        ListProductDto listProductDto = new ListProductDto();
-//        listProductDto.setProductList(productDtoList);
-//
-//        return listProductDto;
-//    }
+    public void buyProduct(List<ProductRequest> request) throws BaseException {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String userId = (String) authentication.getPrincipal();
+
+
+        if (ObjectUtils.isEmpty(request)) {
+            throw new BaseException("request is empty");
+        }
+
+        Optional<User> buyerOpt = userService.findById(userId);
+        User buyer = buyerOpt.get();
+
+        for (ProductRequest p : request) {
+
+            Optional<Product> productOptional = productService.findById(p.getId());
+            Product product = productOptional.get();
+
+            transactionService.create(product, buyer);
+
+        }
+
+    }
+
 }
